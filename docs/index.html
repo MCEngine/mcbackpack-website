@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCBackpack Documentation</title>
+    
+    <link rel="stylesheet" href="css/main.css">
+    
+    <link rel="stylesheet" href="css/partial/header.css">
+    <link rel="stylesheet" href="css/partial/footer.css">
+</head>
+<body>
+
+    <div id="header-container"></div>
+
+    <main class="main-container">
+        
+        <h1>MCBackpack</h1>
+        <p>
+            <strong>MCBackpack</strong> is a robust, database-driven backpack plugin for Minecraft servers (Spigot/Paper). It features secure password protection, support for both MySQL and SQLite, and a unique "Creation Item" workflow that allows administrators to distribute backpack tokens that players initialize themselves.
+        </p>
+
+        <h2>🌟 Key Features</h2>
+        <ul>
+            <li><strong>Database Storage:</strong> Supports <strong>SQLite</strong> (default, local file) and <strong>MySQL</strong> (for cross-server sync capability).</li>
+            <li><strong>Secure Locking:</strong> Backpacks can be locked with a password.
+                <ul>
+                    <li>Uses <strong>Salted SHA-256 Hashing</strong> for security.</li>
+                    <li>Unlocking is done via a secure chat prompt (messages are hidden from public chat).</li>
+                </ul>
+            </li>
+            <li><strong>Creation Workflow:</strong> Admins spawn "Creation Items" (uninitialized heads). When a player right-clicks one, it generates a unique UUID and registers it in the database.</li>
+            <li><strong>Custom Textures:</strong> Support for custom Base64 skull textures for backpack items.</li>
+            <li><strong>Recursive Prevention:</strong> Prevents players from putting backpacks inside other backpacks.</li>
+            <li><strong>Async I/O:</strong> All database operations are performed asynchronously to prevent server lag.</li>
+        </ul>
+
+        <hr>
+
+        <h2>🚀 Installation</h2>
+        <ol>
+            <li>Download the plugin <code>.jar</code> file.</li>
+            <li>Place it in your server's <code>plugins</code> folder.</li>
+            <li>Restart the server to generate the configuration file.</li>
+            <li>(Optional) Edit <code>config.yml</code> to switch from SQLite to MySQL.</li>
+        </ol>
+
+        <h3>Configuration (config.yml)</h3>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span>config.yml</span>
+                <span>YAML</span>
+            </div>
+<pre><code><span class="keyword">db:</span>
+  <span class="comment"># Connection type: 'sqlite' (local file) or 'mysql' (external database)</span>
+  <span class="keyword">type:</span> <span class="string">sqlite</span>
+
+  <span class="comment"># Settings for local SQLite database</span>
+  <span class="keyword">sqlite:</span>
+    <span class="comment"># The name of the database file inside the plugin folder</span>
+    <span class="keyword">path:</span> <span class="string">mcbackpack.db</span>
+   
+  <span class="comment"># Settings for external MySQL/MariaDB database</span>
+  <span class="keyword">mysql:</span>
+    <span class="keyword">host:</span> <span class="string">localhost</span>
+    <span class="keyword">port:</span> <span class="string">"3306"</span>
+    <span class="keyword">database:</span> <span class="string">mcbackpack</span>
+    <span class="keyword">user:</span> <span class="string">root</span>
+    <span class="keyword">password:</span> <span class="string">mcbackpack</span>
+    <span class="keyword">ssl:</span> <span class="string">"false"</span></code></pre>
+        </div>
+
+        <h1>🛠️ Usage Guide</h1>
+
+        <h3>1. Creating a Backpack</h3>
+        <p>Unlike standard plugins where a command opens a virtual inventory immediately, MCBackpack gives you a physical item.</p>
+        <ol>
+            <li><strong>Get a Creation Item:</strong> Run the command to get a "Backpack Creation" head. You can specify the size (multiples of 9) and an optional custom texture.
+                <ul>
+                    <li><code>/backpack create 27</code></li>
+                    <li><code>/backpack create 27 &lt;"head texture base64"&gt;</code></li>
+                </ul>
+            </li>
+            <li><strong>Initialize:</strong> Right-click the "Backpack Creation" item while holding it.
+                <ul>
+                    <li>The item will be registered in the database with a unique UUID.</li>
+                    <li>The item name changes to "Backpack (Size: 27)".</li>
+                    <li>It is now ready for storage.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>2. Protecting Your Backpack</h3>
+        <p>You can lock your backpack so others cannot open it even if they steal the item.</p>
+        <ol>
+            <li><strong>Set a Password:</strong> Hold the initialized backpack and run:
+                <ul>
+                    <li><code>/backpack setpwd &lt;your_password&gt;</code></li>
+                </ul>
+            </li>
+            <li><strong>Unlocking:</strong> When you (or anyone else) tries to open a locked backpack:
+                <ul>
+                    <li>The inventory <strong>will not open</strong>.</li>
+                    <li>You will receive a chat prompt: <em>"Please type the password in chat to unlock."</em></li>
+                    <li>Type the password in chat. <strong>Your message will not be seen by other players</strong>.</li>
+                    <li>If correct, the backpack opens.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>Commands & Permissions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Command</th>
+                    <th>Arguments</th>
+                    <th>Permission</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>/bp create</code></td>
+                    <td><code>&lt;size&gt; [texture]</code></td>
+                    <td><code>mcbackpack.create</code></td>
+                    <td>Gives you a Backpack Creation item. Size must be 9, 18, 27, 36, 45, or 54.</td>
+                </tr>
+                <tr>
+                    <td><code>/bp setpwd</code></td>
+                    <td><code>&lt;password&gt;</code></td>
+                    <td><code>mcbackpack.setpwd</code></td>
+                    <td>Sets a password for the backpack currently held in your main hand.</td>
+                </tr>
+                <tr>
+                    <td><code>/bp changepwd</code></td>
+                    <td><code>&lt;old&gt; &lt;new&gt;</code></td>
+                    <td><code>mcbackpack.changepwd</code></td>
+                    <td>Changes the password. Requires knowing the old password.</td>
+                </tr>
+                <tr>
+                    <td><code>/bp deletepwd</code></td>
+                    <td><code>&lt;password&gt;</code></td>
+                    <td><code>mcbackpack.deletepwd</code></td>
+                    <td>Removes the password protection from the held backpack.</td>
+                </tr>
+                <tr>
+                    <td><code>/bp help</code></td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>Displays the help menu.</td>
+                </tr>
+            </tbody>
+        </table>
+        <blockquote>
+            <p><strong>Note:</strong> <code>/bp</code> is an alias for <code>/backpack</code>.</p>
+        </blockquote>
+
+        <h2>🔒 Security Details</h2>
+        <ul>
+            <li><strong>Encryption:</strong> Passwords are never stored in plain text. We use a random Salt + SHA-256 hash strategy (salt$hash). This ensures that even if two players use the same password ("123456"), their stored database entries will look completely different.</li>
+            <li><strong>Chat Interception:</strong> The plugin listens for chat packets at the lowest priority during the unlocking phase and cancels the event, ensuring the password never appears in the server log or chat box.</li>
+        </ul>
+
+        <h2>🚫 Restrictions</h2>
+        <p><strong>Recursive Storage:</strong> You cannot place a backpack inside another backpack.</p>
+        <p>The plugin listens to <code>InventoryClickEvent</code> and <code>InventoryDragEvent</code> to block these actions specifically within the backpack GUI.</p>
+
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script>
+        // Function to fetch HTML and inject it into a specific ID
+        async function loadPartial(elementId, filePath) {
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) throw new Error(`Could not load ${filePath}`);
+                const data = await response.text();
+                document.getElementById(elementId).innerHTML = data;
+            } catch (error) {
+                console.error("Error loading partial:", error);
+            }
+        }
+
+        // Load the header and footer
+        // Note: This requires running on a local server (e.g., Live Server) to avoid CORS errors.
+        document.addEventListener("DOMContentLoaded", () => {
+            loadPartial("header-container", "partial/header.html");
+            loadPartial("footer-container", "partial/footer.html");
+        });
+    </script>
+
+</body>
+</html>

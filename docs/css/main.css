@@ -1,0 +1,213 @@
+/* =========================================
+   1. FONTS & RESET
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+    /* "Crop" Style Palette */
+    --bg-body: #050505;       /* Almost pure black */
+    --bg-surface: #0f1115;    /* Very dark grey for panels */
+    --bg-surface-hover: #16181d;
+    
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-highlight: rgba(255, 255, 255, 0.15);
+    
+    --text-primary: #ededed;
+    --text-secondary: #94969d;
+    --text-muted: #5e6066;
+    
+    /* Modern Neon Accent */
+    --accent-glow: rgba(56, 189, 248, 0.15);
+    --accent-color: #38bdf8; /* Cyan/Blue */
+    
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    
+    --radius-md: 12px;
+    --radius-sm: 8px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background-color: var(--bg-body);
+    /* Subtle top spotlight effect */
+    background-image: radial-gradient(circle at 50% 0%, #1a1d26 0%, transparent 60%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-body); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* =========================================
+   2. LAYOUT & TYPOGRAPHY
+   ========================================= */
+.main-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    min-height: 80vh;
+    animation: fadeIn 0.6s ease-out;
+}
+
+h1, h2, h3 {
+    color: var(--text-primary);
+    margin-top: 2em;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    /* Gradient Text */
+    background: linear-gradient(to right, #fff, #94969d);
+    
+    /* Standard property added below for compatibility */
+    background-clip: text; 
+    
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-bottom: none; 
+}
+
+h2 {
+    font-size: 1.8rem;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.2rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+    color: var(--text-primary); 
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+p { margin-bottom: 1.5em; color: var(--text-secondary); font-size: 1.05rem; }
+
+/* Inline Code */
+code:not(pre code) {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--accent-color);
+    padding: 0.2em 0.5em;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+}
+
+/* Lists */
+ul, ol { padding-left: 1.5rem; color: var(--text-secondary); }
+li { margin-bottom: 0.8rem; }
+li strong { color: var(--text-primary); }
+
+/* Horizontal Rule */
+hr {
+    height: 1px;
+    margin: 40px 0;
+    border: 0;
+    background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+}
+
+/* =========================================
+   3. MODERN COMPONENTS
+   ========================================= */
+
+/* Tables - Card Style */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 30px 0;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+th, td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+th {
+    background-color: rgba(255,255,255,0.02);
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background-color: var(--bg-surface-hover); }
+
+/* Blockquotes */
+blockquote {
+    margin: 30px 0;
+    padding: 20px 24px;
+    background: rgba(56, 189, 248, 0.05); /* Very subtle blue tint */
+    border-left: 3px solid var(--accent-color);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    color: var(--text-primary);
+    font-style: normal;
+}
+
+/* Code Blocks */
+.code-container {
+    background: #0d0e12; 
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    margin: 30px 0;
+    overflow: hidden;
+    box-shadow: 0 0 40px -10px rgba(0,0,0,0.5);
+}
+
+.code-header {
+    background: rgba(255,255,255,0.03);
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-family: var(--font-main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+pre {
+    margin: 0;
+    padding: 24px;
+    overflow-x: auto;
+    color: #e6edf3;
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+/* Syntax Highlighting overrides for higher contrast */
+.keyword { color: #ff7b72; }
+.string { color: #a5d6ff; }
+.comment { color: #6e7681; font-style: italic; }
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
