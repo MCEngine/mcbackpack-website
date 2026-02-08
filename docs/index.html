@@ -111,6 +111,23 @@
             </li>
         </ol>
 
+        <h3>3. Customizing Appearance</h3>
+        <p>You can change the texture of an existing backpack using a Backpack Texture Applicator.</p>
+        <ol>
+            <li><strong>Get an Applicator:</strong> Run the command:
+                <ul>
+                    <li><code>/backpack texture &lt;base64_texture_string&gt;</code></li>
+                </ul>
+            </li>
+            <li><strong>Apply Texture:</strong> Open your inventory and click on the backpack item with the "Backpack Texture Applicator".
+                <ul>
+                    <li>The backpack will instantly update to the new texture.</li>
+                    <li>The applicator is consumed upon use.</li>
+                    <li>The change is saved to the database.</li>
+                </ul>
+            </li>
+        </ol>
+
         <h2>Commands & Permissions</h2>
         <table>
             <thead>
@@ -145,6 +162,12 @@
                     <td><code>&lt;password&gt;</code></td>
                     <td><code>mcbackpack.deletepwd</code></td>
                     <td>Removes the password protection from the held backpack.</td>
+                </tr>
+                <tr>
+                    <td><code>/bp texture</code></td>
+                    <td><code>&lt;base64&gt;</code></td>
+                    <td><code>mcbackpack.texture</code></td>
+                    <td>Gives a Backpack Texture Applicator item to change a backpack's skin.</td>
                 </tr>
                 <tr>
                     <td><code>/bp help</code></td>
